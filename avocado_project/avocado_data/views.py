@@ -2,6 +2,7 @@ from django.shortcuts import render
 from datetime import datetime
 from .models import Avocado_Price
 from .models import City_House_Price
+from .utils import get_plot
 
 def avocado_data(request):
 	price_list = Avocado_Price.objects.all()
@@ -9,7 +10,10 @@ def avocado_data(request):
 
 def home_data(request):
 	price_list = City_House_Price.objects.all()
-	return render(request, 'avocado_data/house_price_data.html', {"price_list" : price_list})
+	x = [x.city for x in price_list]
+	y = [y.average_price for y in price_list]
+	chart = get_plot(x,y)
+	return render(request, 'avocado_data/house_price_data.html', {"price_list" : price_list, "chart" : chart })
 
 
 
